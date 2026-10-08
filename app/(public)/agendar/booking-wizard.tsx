@@ -25,13 +25,13 @@ export function BookingWizard({ services, days, slots }: { services: string[]; d
   if (state?.ok) {
     return (
       <div className="animate-rise text-center">
-        <span className="mx-auto flex size-16 items-center justify-center rounded-full bg-success-soft text-success"><Check size={30} /></span>
+        <span className="mx-auto flex size-12 items-center justify-center rounded-xl bg-primary text-primary-foreground"><Check size={22} /></span>
         <h1 className="mt-6 text-title-1">Solicitud recibida</h1>
-        <p className="mx-auto mt-3 max-w-md text-[17px] leading-7 text-muted-foreground">
+        <p className="mx-auto mt-3 max-w-md text-[16px] leading-7 text-muted-foreground">
           Te contactaremos para confirmar tu cita de <b className="font-medium text-foreground">{service}</b> el {longFormat.format(toDate(date!))} a las {time}.
         </p>
-        <p className="mt-6 text-[13px] text-subtle">Folio {state.reference}</p>
-        <p className="mx-auto mt-8 max-w-md rounded-2xl bg-card p-4 text-[14px] leading-6 text-muted-foreground shadow-card">
+        <p className="mt-6 text-[13px] text-subtle">Folio <span className="font-mono text-foreground">{state.reference}</span></p>
+        <p className="mx-auto mt-8 max-w-md rounded-lg border border-border bg-surface px-4 py-3 text-[14px] leading-6 text-muted-foreground">
           Si cuentas con estudios previos o expediente clínico, por favor tráelos el día de tu cita.
         </p>
         <Link href="/" className={buttonVariants({ variant: 'secondary', className: 'mt-8' })}>Volver al inicio</Link>
@@ -43,16 +43,19 @@ export function BookingWizard({ services, days, slots }: { services: string[]; d
 
   return (
     <div>
-      <p className="text-eyebrow">Paso {step + 1} de {steps.length}</p>
-      <h1 className="mt-1 text-title-1">{step === 0 ? '¿Qué servicio necesitas?' : step === 1 ? 'Elige fecha y hora.' : 'Cuéntanos de ti.'}</h1>
-
-      <div className="mt-6 flex gap-1.5" aria-hidden="true">
-        {steps.map((label, i) => <span key={label} className={cn('h-1 flex-1 rounded-full transition-colors duration-300', i <= step ? 'bg-primary' : 'bg-muted')} />)}
-      </div>
+      {/* Progreso: cada paso con su nombre, para saber qué falta. */}
+      <ol className="mb-10 grid grid-cols-3 gap-2" aria-label={`Paso ${step + 1} de ${steps.length}`}>
+        {steps.map((label, i) => (
+          <li key={label} aria-current={i === step ? 'step' : undefined} className={cn('border-t-2 pt-2.5 text-[12px] font-medium transition-colors duration-200', i <= step ? 'border-primary text-foreground' : 'border-input text-subtle')}>
+            <span className="tabular-nums">{i + 1}.</span> {label}
+          </li>
+        ))}
+      </ol>
+      <h1 className="text-title-1">{step === 0 ? '¿Qué servicio necesitas?' : step === 1 ? 'Elige fecha y hora.' : 'Cuéntanos de ti.'}</h1>
 
       {/* onSubmit en lugar de `action` para que React no limpie los campos si hay un error de validación */}
       <form
-        className="mt-10"
+        className="mt-8"
         onSubmit={(event) => {
           event.preventDefault()
           const data = new FormData(event.currentTarget)
@@ -64,11 +67,13 @@ export function BookingWizard({ services, days, slots }: { services: string[]; d
         <input type="hidden" name="time" value={time ?? ''} />
 
         {step === 0 && (
-          <div role="radiogroup" aria-label="Servicio" className="divide-y divide-separator overflow-hidden rounded-2xl bg-card shadow-card">
+          <div role="radiogroup" aria-label="Servicio" className="divide-y divide-separator overflow-hidden rounded-xl border border-border bg-card">
             {services.map((item) => (
-              <button key={item} type="button" role="radio" aria-checked={service === item} onClick={() => setService(item)} className="flex w-full items-center justify-between px-5 py-4 text-left text-[15px] transition-colors hover:bg-muted/60">
+              <button key={item} type="button" role="radio" aria-checked={service === item} onClick={() => setService(item)} className={cn('flex w-full items-center gap-3 px-5 py-4 text-left text-[15px] transition-colors duration-150 focus-visible:-outline-offset-2', service === item ? 'bg-surface font-medium' : 'hover:bg-surface')}>
+                <span aria-hidden="true" className={cn('flex size-4 shrink-0 items-center justify-center rounded-full border transition-colors', service === item ? 'border-primary bg-primary' : 'border-input bg-card')}>
+                  {service === item && <span className="size-1.5 rounded-full bg-white" />}
+                </span>
                 {item}
-                <Check size={18} className={cn('text-primary transition-opacity', service === item ? 'opacity-100' : 'opacity-0')} aria-hidden="true" />
               </button>
             ))}
           </div>
@@ -77,7 +82,7 @@ export function BookingWizard({ services, days, slots }: { services: string[]; d
         {step === 1 && (
           <div className="space-y-8">
             <fieldset>
-              <legend className="mb-3 text-[13px] font-medium text-muted-foreground">Fecha</legend>
+              <legend className="mb-3 text-[13px] font-medium">Fecha</legend>
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
                 {days.map((iso) => (
                   <Choice key={iso} selected={date === iso} onClick={() => setDate(iso)}>
@@ -87,7 +92,7 @@ export function BookingWizard({ services, days, slots }: { services: string[]; d
               </div>
             </fieldset>
             <fieldset>
-              <legend className="mb-3 text-[13px] font-medium text-muted-foreground">Hora</legend>
+              <legend className="mb-3 text-[13px] font-medium">Hora</legend>
               <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
                 {slots.map((slot) => <Choice key={slot} selected={time === slot} onClick={() => setTime(slot)}>{slot}</Choice>)}
               </div>
@@ -104,11 +109,11 @@ export function BookingWizard({ services, days, slots }: { services: string[]; d
           </div>
           <Field label="Motivo de consulta o estudios solicitados" hint="Opcional"><Textarea name="reason" /></Field>
           <Field label="Médico que te refiere" hint="Opcional"><Input name="referredBy" /></Field>
-          {state && !state.ok && <p role="alert" className="rounded-xl bg-danger-soft px-4 py-3 text-[14px] text-danger">{state.error}</p>}
-          <p className="text-[13px] leading-5 text-subtle">Tus datos se usan únicamente para gestionar tu cita.</p>
+          {state && !state.ok && <p role="alert" className="rounded-lg border border-danger/20 bg-danger-soft px-3.5 py-3 text-[13px] leading-5 text-danger">{state.error}</p>}
+          <p className="text-[12px] leading-5 text-subtle">Tus datos se usan únicamente para gestionar tu cita.</p>
         </div>
 
-        <div className="mt-10 flex items-center justify-between">
+        <div className="mt-10 flex items-center justify-between border-t border-border pt-5">
           {step > 0
             ? <Button type="button" variant="ghost" onClick={() => setStep(step - 1)}><ChevronLeft /> Atrás</Button>
             : <Link href="/" className={buttonVariants({ variant: 'ghost' })}><ChevronLeft /> Inicio</Link>}
@@ -128,8 +133,8 @@ function Choice({ selected, onClick, children }: { selected: boolean; onClick: (
       aria-pressed={selected}
       onClick={onClick}
       className={cn(
-        'h-12 rounded-xl text-[14px] font-medium tabular-nums transition-[background-color,color,box-shadow] duration-200',
-        selected ? 'bg-primary text-primary-foreground' : 'bg-card text-foreground shadow-card hover:bg-muted',
+        'h-11 rounded-lg border text-[14px] font-medium tabular-nums transition-[background-color,border-color,color] duration-150',
+        selected ? 'border-primary bg-primary text-primary-foreground' : 'border-input bg-card text-foreground hover:border-[#b5b5b5]',
       )}
     >
       {children}

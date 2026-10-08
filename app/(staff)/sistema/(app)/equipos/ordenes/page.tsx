@@ -1,11 +1,8 @@
-import Link from 'next/link'
-import { ChevronLeft } from 'lucide-react'
-
 import { Card, CardHeader } from '@/components/ui/card'
 import { LinkTabs } from '@/components/ui/link-tabs'
 import { List, ListItem } from '@/components/ui/list'
 import { Badge } from '@/components/ui/badge'
-import { PageHeader } from '@/components/ui/page-header'
+import { BackLink, PageHeader } from '@/components/ui/page-header'
 import { canAccess } from '@/modules/auth/permissions'
 import { requireStaff } from '@/modules/auth/session'
 import { equipmentSummary, listWorkOrderRows } from '@/modules/equipment/data'
@@ -24,9 +21,7 @@ export default async function WorkOrdersPage({ searchParams }: PageProps<'/siste
 
   return (
     <>
-      <Link href="/sistema/equipos" className="-ml-1 mb-6 inline-flex items-center gap-0.5 text-[14px] text-accent-foreground hover:underline">
-        <ChevronLeft size={17} aria-hidden="true" /> Equipos médicos
-      </Link>
+      <BackLink href="/sistema/equipos">Equipos médicos</BackLink>
       <PageHeader eyebrow="Ingeniería biomédica" title="Órdenes de trabajo" description="Correctivos, preventivos, calibraciones y pruebas de seguridad eléctrica." />
 
       <LinkTabs label="Vista" current={view} items={[

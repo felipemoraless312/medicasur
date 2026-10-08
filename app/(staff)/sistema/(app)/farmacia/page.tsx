@@ -38,7 +38,7 @@ export default async function PharmacyPage() {
         eyebrow="Hospital"
         title="Farmacia"
         description="Surtido de recetas del expediente. Antes de entregar: verificar paciente, alergias, dosis y vigencia."
-        actions={canAccess(user.role, 'inventory') && <Link href="/sistema/inventario?tipo=medicamento" className="text-[14px] font-medium text-accent-foreground hover:underline">Inventario de medicamentos</Link>}
+        actions={canAccess(user.role, 'inventory') && <Link href="/sistema/inventario?tipo=medicamento" className="text-[14px] font-medium link-quiet">Inventario de medicamentos</Link>}
       />
       <KpiGrid items={[
         { label: 'Recetas por surtir', value: String(internal.length), icon: Pill, tone: internal.length > 5 ? 'warning' : 'default' },

@@ -19,13 +19,13 @@ export function PortalNav() {
   const pathname = usePathname()
 
   return (
-    <nav aria-label="Portal" className="-mx-5 overflow-x-auto px-5 [scrollbar-width:none]">
-      <ul className="flex gap-1">
+    <nav aria-label="Portal" className="-mx-5 overflow-x-auto px-5 scrollbar-none">
+      <ul className="flex w-max gap-5">
         {items.map(({ href, label }) => {
           const active = pathname === href
           return (
             <li key={href}>
-              <Link href={href} aria-current={active ? 'page' : undefined} className={cn('flex h-8 items-center whitespace-nowrap rounded-full px-3.5 text-[13px] font-medium transition-colors', active ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-muted hover:text-foreground')}>
+              <Link href={href} aria-current={active ? 'page' : undefined} className={cn('-mb-px flex h-11 items-center whitespace-nowrap border-b-2 text-[13px] font-medium transition-colors duration-150', active ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:border-input hover:text-foreground')}>
                 {label}
               </Link>
             </li>

@@ -19,7 +19,7 @@ import { news2, vitalFlags } from '@/modules/patients/clinical-rules'
 
 export const metadata = { title: 'Resumen' }
 
-const linkClass = 'text-[13px] font-medium text-accent-foreground hover:underline'
+const linkClass = 'shrink-0 text-[13px] font-medium link-quiet'
 const isActive = (a: Appointment) => a.status !== 'cancelada' && a.status !== 'no-asistio'
 
 /** Resumen del día: cada rol ve los indicadores de su trabajo. */
@@ -104,18 +104,18 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <PageHeader eyebrow={formatWeekday()} title={`${greeting()}, ${firstName(user.name)}`} />
+      <PageHeader eyebrow={formatWeekday()} title={`${greeting()}, ${firstName(user.name)}.`} />
       <KpiGrid items={kpis} />
 
       {alerts.length > 0 && (
-        <section className="mt-4 rounded-2xl bg-danger-soft p-5" aria-label="Alertas clínicas">
-          <h2 className="flex items-center gap-2 text-[15px] font-semibold text-danger"><Activity size={17} aria-hidden="true" /> Pacientes que requieren valoración</h2>
-          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+        <section className="mt-4 overflow-hidden rounded-xl border border-danger/25" aria-label="Alertas clínicas">
+          <h2 className="flex items-center gap-2 border-b border-danger/15 bg-danger-soft px-5 py-3 text-[13px] font-semibold text-danger"><Activity size={15} aria-hidden="true" /> Pacientes que requieren valoración · {alerts.length}</h2>
+          <ul className="grid divide-y divide-separator bg-card sm:grid-cols-2 sm:divide-y-0 sm:[&>li:nth-child(n+3)]:border-t sm:[&>li:nth-child(even)]:border-l sm:[&>li]:border-separator">
             {alerts.map((a) => (
               <li key={a.patient.id}>
-                <Link href={`/sistema/pacientes/${a.patient.id}?seccion=signos`} className="flex items-center justify-between gap-3 rounded-xl bg-card px-4 py-3 shadow-card hover:bg-muted/60">
+                <Link href={`/sistema/pacientes/${a.patient.id}?seccion=signos`} className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-surface">
                   <span className="min-w-0">
-                    <span className="block truncate font-medium">{a.patient.name}</span>
+                    <span className="block truncate text-[14px] font-medium">{a.patient.name}</span>
                     <span className="block truncate text-[13px] text-muted-foreground">{formatTime(a.vitals.takenAt)} · {a.flags.map((f) => f?.label).filter(Boolean).join(' · ')}</span>
                   </span>
                   {a.score && <Badge tone={a.score.tone}>NEWS2 {a.score.score}</Badge>}
@@ -151,12 +151,12 @@ export default async function DashboardPage() {
                   { key: 'pendiente', name: 'Por llegar', value: todays.filter((a) => a.status === 'confirmada').length, color: 'var(--grid)' },
                 ]}
               />
-              <h3 className="mb-1 mt-5 text-[13px] font-medium text-muted-foreground">Siguientes</h3>
+              <h3 className="mb-1 mt-6 border-t border-separator pt-4 text-[12px] font-medium text-muted-foreground">Siguientes</h3>
               {upcoming.length ? (
                 <ul className="divide-y divide-separator">
                   {upcoming.map((a) => (
                     <li key={a.id} className="flex items-center gap-3 py-2.5">
-                      <span className="w-11 shrink-0 text-[14px] font-semibold tabular-nums">{a.time}</span>
+                      <span className="w-11 shrink-0 text-[13px] font-semibold tabular-nums">{a.time}</span>
                       <span className="min-w-0 flex-1"><span className="block truncate text-[14px] font-medium">{a.patientName}</span><span className="block truncate text-[12px] text-muted-foreground">{a.service}</span></span>
                       <Badge tone={appointmentStatus[a.status].tone}>{appointmentStatus[a.status].label}</Badge>
                     </li>
@@ -168,8 +168,8 @@ export default async function DashboardPage() {
         )}
       </div>
 
-      {/* Fila inferior: se reparte según cuántas tarjetas ve el rol, sin columnas vacías. */}
-      <div className={`mt-4 grid gap-4 ${lowerCards >= 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'}`}>
+      {/* Fila inferior: tres tarjetas en una fila; dos o cuatro, en rejilla de 2 columnas, sin huecos. */}
+      <div className={`mt-4 grid gap-4 ${lowerCards === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'}`}>
         {movements && (
           <ChartCard title="Consumo de inventario" description="Unidades que salieron por día (14 días)" action={<Link href="/sistema/inventario" className={linkClass}>Inventario</Link>}>
             <ColumnChart

@@ -39,7 +39,7 @@ export default async function SurgeryPage() {
 
       <ChartCard className="mt-4" title="Programa por sala" description="Toca un procedimiento para ver al paciente">
         <div className="-mx-5 overflow-x-auto px-5 sm:-mx-6 sm:px-6">
-          <div className="min-w-[44rem]">
+          <div className="min-w-176">
             <div className="relative ml-28 h-5" aria-hidden="true">
               {hours.map((h) => <span key={h} className="absolute -translate-x-1/2 text-[11px] tabular-nums text-subtle" style={{ left: `${pct(h * 60)}%` }}>{h}</span>)}
             </div>
@@ -47,7 +47,7 @@ export default async function SurgeryPage() {
               {rooms.map((room) => (
                 <div key={room} className="flex items-center gap-3">
                   <span className="w-25 shrink-0 truncate text-[13px] font-medium">{room}</span>
-                  <div className="relative h-14 flex-1 rounded-xl bg-muted/60">
+                  <div className="relative h-14 flex-1 rounded-lg border border-border bg-surface">
                     {hours.slice(1, -1).map((h) => <span key={h} className="absolute inset-y-0 w-px bg-grid" style={{ left: `${pct(h * 60)}%` }} aria-hidden="true" />)}
                     {procedures.filter((p) => p.room === room).map((p) => {
                       const start = minutesOf(p.start)
@@ -58,10 +58,10 @@ export default async function SurgeryPage() {
                           <span className="block truncate text-[11px] leading-4 text-muted-foreground">{p.start}–{timeOf(start + p.duration)} · {p.patientName}</span>
                         </>
                       )
-                      const className = cn('absolute inset-y-1 overflow-hidden rounded-lg border-l-[3px] bg-card px-2 py-1 shadow-card', p.status === 'concluido' && 'opacity-70')
+                      const className = cn('absolute inset-y-1 overflow-hidden rounded-md border border-border border-l-2 bg-card px-2 py-1', p.status === 'concluido' && 'opacity-60')
                       const style = { left: `calc(${pct(start)}% + 1px)`, width: `calc(${pct(start + p.duration) - pct(start)}% - 2px)`, borderLeftColor: meta.color }
                       return canOpen && p.patientId
-                        ? <Link key={p.id} href={`/sistema/pacientes/${p.patientId}`} className={cn(className, 'hover:bg-muted')} style={style} title={`${p.procedure} · ${meta.label}`}>{body}</Link>
+                        ? <Link key={p.id} href={`/sistema/pacientes/${p.patientId}`} className={cn(className, 'transition-colors hover:border-[#c4c4c4]')} style={style} title={`${p.procedure} · ${meta.label}`}>{body}</Link>
                         : <div key={p.id} className={className} style={style} title={`${p.procedure} · ${meta.label}`}>{body}</div>
                     })}
                   </div>
@@ -69,15 +69,15 @@ export default async function SurgeryPage() {
               ))}
               {now >= START && now <= END && (
                 <div className="pointer-events-none absolute inset-y-0 ml-28 w-[calc(100%-7rem)]" aria-label={`Hora actual ${timeOf(now)}`}>
-                  <div className="absolute inset-y-0 w-0.5 rounded-full bg-danger" style={{ left: `${pct(now)}%` }} />
+                  <div className="absolute inset-y-0 w-px bg-danger" style={{ left: `${pct(now)}%` }} />
                 </div>
               )}
             </div>
           </div>
         </div>
         <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-muted-foreground">
-          {(Object.keys(procedureStatus) as ProcedureStatus[]).map((s) => <li key={s} className="flex items-center gap-1.5"><span className="size-2.5 rounded-[3px]" style={{ background: procedureStatus[s].color }} />{procedureStatus[s].label}</li>)}
-          <li className="flex items-center gap-1.5"><span className="h-2.5 w-0.5 rounded-full bg-danger" />Hora actual</li>
+          {(Object.keys(procedureStatus) as ProcedureStatus[]).map((s) => <li key={s} className="flex items-center gap-1.5"><span className="size-2 rounded-xs" style={{ background: procedureStatus[s].color }} />{procedureStatus[s].label}</li>)}
+          <li className="flex items-center gap-1.5"><span className="h-2.5 w-px bg-danger" />Hora actual</li>
         </ul>
       </ChartCard>
 
@@ -93,10 +93,10 @@ export default async function SurgeryPage() {
               trailing={<Badge tone={procedureStatus[p.status].tone}>{procedureStatus[p.status].label}</Badge>}
             />
           ))}
-          {!next.length && <li className="px-6 py-6 text-[14px] text-muted-foreground">No quedan procedimientos programados hoy.</li>}
+          {!next.length && <li className="px-5 py-6 text-[13px] text-muted-foreground sm:px-6">No quedan procedimientos programados hoy.</li>}
         </List>
       </ChartCard>
-      <p className="mt-6 px-1 text-xs text-subtle">Programa de demostración con datos ficticios. Se conectará con la nota preoperatoria y postoperatoria del expediente.</p>
+      <p className="mt-6 text-[12px] text-subtle">Programa de demostración con datos ficticios. Se conectará con la nota preoperatoria y postoperatoria del expediente.</p>
     </>
   )
 }

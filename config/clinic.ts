@@ -6,14 +6,14 @@
 export const clinic = {
   slug: 'medica-sur',
   /** Nombre de la clínica: es el que aparece en el título, el logotipo y los documentos. */
-  name: 'Médica Sur',
-  shortName: 'Médica Sur',
+  name: 'Dr. Francisco Antonio Ramos Narváez',
+  shortName: 'Dr. Francisco Antonio Ramos Narváez',
   /** Titular de la clínica; se menciona en su perfil profesional, no como nombre del sitio. */
   director: { name: 'Dr. Francisco Antonio Ramos Narváez', title: 'Director médico' },
   specialty: 'Cirugía General · Gastroenterología',
   description:
-    'Médica Sur, clínica de cirugía general y gastroenterología en Tuxtla Gutiérrez, Chiapas, dirigida por el Dr. Francisco Antonio Ramos Narváez.',
-  heroImage: '/images/dr.francisco.jpg',
+    'Dr. Francisco Antonio Ramos Narváez, cirugía general y gastroenterología en Tuxtla Gutiérrez, Chiapas.',
+  heroImage: '/images/dr-francisco-retrato.jpeg',
   sanitaryNotice: 'SSA-00912219',
   website: 'https://www.drfranciscoramosnarvaez.com',
   email: 'franciscoramosnarvaez@gmail.com',
@@ -28,9 +28,9 @@ export const clinic = {
     city: 'Tuxtla Gutiérrez, Chiapas',
     /** Enlace para abrir la ubicación en Google Maps (botón "Cómo llegar"). */
     mapsUrl: 'https://maps.app.goo.gl/3uW3F5qW8oV2qzc38',
-    /** Coordenadas del consultorio (Médica Sur) para el mapa incrustado. */
+    /** Coordenadas del consultorio para el mapa incrustado. */
     coordinates: { lat: 16.7523159, lng: -93.120488 },
-    placeName: 'Médica Sur',
+    placeName: 'Dr. Francisco Antonio Ramos Narváez',
   },
   highlights: [
     { value: '45+', label: 'años de experiencia' },

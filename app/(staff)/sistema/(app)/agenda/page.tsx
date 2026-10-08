@@ -1,10 +1,11 @@
 import Link from 'next/link'
-import { CalendarPlus, ChevronLeft, ChevronRight } from 'lucide-react'
+import { CalendarDays, CalendarPlus, ChevronLeft, ChevronRight } from 'lucide-react'
 
 import { ActionForm } from '@/components/ui/action-form'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardHeader } from '@/components/ui/card'
 import { Dialog } from '@/components/ui/dialog'
+import { EmptyState } from '@/components/ui/empty-state'
 import { Field, FieldGrid, Input, Select } from '@/components/ui/field'
 import { LinkTabs } from '@/components/ui/link-tabs'
 import { clinic } from '@/config/clinic'
@@ -56,11 +57,11 @@ export default async function AgendaPage({ searchParams }: PageProps<'/sistema/a
 
   return (
     <>
-      <header className="mb-6 space-y-4">
+      <header className="mb-5 space-y-5">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="min-w-0">
-            <p className="text-eyebrow">{date === today && view === 'dia' ? 'Hoy' : 'Agenda'}</p>
-            <h1 className="mt-1 text-title-1">{title}</h1>
+            <p className="mb-3 text-index">{date === today && view === 'dia' ? 'Hoy' : 'Agenda'}</p>
+            <h1 className="text-page-title first-letter:uppercase">{title}</h1>
           </div>
           {canWrite && (
             <Dialog title="Nueva cita" trigger={<><CalendarPlus /> Nueva cita</>} triggerStyle={{ variant: 'primary', size: 'md' }}>
@@ -90,16 +91,18 @@ export default async function AgendaPage({ searchParams }: PageProps<'/sistema/a
           )}
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <LinkTabs label="Vista" current={view} items={views.map((v) => ({ key: v.key, label: v.label, href: calendarHref(v.key, date) }))} className="mx-0 px-0" />
-          <div className="flex items-center gap-1 rounded-full bg-muted p-1">
-            <Link href={calendarHref(view, step(-1))} aria-label="Anterior" className={buttonVariants({ variant: 'ghost', size: 'icon-sm' })}><ChevronLeft /></Link>
-            <Link href={calendarHref(view, today)} className={buttonVariants({ variant: 'ghost', size: 'sm' })}>Hoy</Link>
-            <Link href={calendarHref(view, step(1))} aria-label="Siguiente" className={buttonVariants({ variant: 'ghost', size: 'icon-sm' })}><ChevronRight /></Link>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-y border-border py-3">
+          <div className="flex items-center gap-2">
+            <Link href={calendarHref(view, today)} className={buttonVariants({ variant: 'secondary', size: 'sm' })}>Hoy</Link>
+            <div className="flex items-center">
+              <Link href={calendarHref(view, step(-1))} aria-label="Anterior" className={buttonVariants({ variant: 'secondary', size: 'icon-sm', className: 'rounded-r-none' })}><ChevronLeft /></Link>
+              <Link href={calendarHref(view, step(1))} aria-label="Siguiente" className={buttonVariants({ variant: 'secondary', size: 'icon-sm', className: '-ml-px rounded-l-none' })}><ChevronRight /></Link>
+            </div>
           </div>
+          <LinkTabs variant="segmented" label="Vista" current={view} items={views.map((v) => ({ key: v.key, label: v.label, href: calendarHref(v.key, date) }))} />
         </div>
 
-        <dl className="flex flex-wrap gap-x-6 gap-y-2 text-[13px]">
+        <dl className="flex flex-wrap gap-x-5 gap-y-1.5 text-[13px]">
           <div className="flex items-baseline gap-1.5"><dt className="text-muted-foreground">Citas</dt><dd className="font-semibold">{active.length}</dd></div>
           {(['en-espera', 'confirmada', 'solicitada', 'completada', 'no-asistio', 'cancelada'] as const).map((s) => byStatus(s) > 0 && (
             <div key={s} className="flex items-baseline gap-1.5"><dt className="text-muted-foreground">{appointmentStatus[s].label}</dt><dd className="font-semibold">{byStatus(s)}</dd></div>
@@ -110,10 +113,10 @@ export default async function AgendaPage({ searchParams }: PageProps<'/sistema/a
       {view === 'dia' ? (
         <div className="grid items-start gap-4 lg:grid-cols-[1fr_19rem]">
           <Card className="overflow-hidden pb-4">
-            {appointments.length ? <DayView date={date} appointments={appointments} linkToRecord={linkToRecord} /> : <p className="px-6 py-16 text-center text-muted-foreground">Sin citas este día.</p>}
+            {appointments.length ? <DayView date={date} appointments={appointments} linkToRecord={linkToRecord} /> : <EmptyState icon={CalendarDays} title="Sin citas este día" description={canWrite ? 'Usa “Nueva cita” para agendar o elige otro día en el calendario.' : 'Elige otro día en el calendario.'} className="py-20" />}
           </Card>
           <aside className="space-y-4">
-            <Card className="p-4"><MiniMonth month={date} selected={date} counts={counts} /></Card>
+            <Card className="p-4 pb-3"><MiniMonth month={date} selected={date} counts={counts} /></Card>
             <Card>
               <CardHeader title="Por atender" description="Toca una cita para ver su ficha." />
               <div className="mt-2 pb-2">
@@ -137,7 +140,7 @@ export default async function AgendaPage({ searchParams }: PageProps<'/sistema/a
             <AppointmentList appointments={requested.slice(0, 5)} manage showDate />
             {requested.length > 5 && (
               <details className="group">
-                <summary className="cursor-pointer list-none px-6 py-3 text-[14px] font-medium text-accent-foreground hover:underline group-open:hidden">Ver las {requested.length - 5} restantes</summary>
+                <summary className="cursor-pointer list-none border-t border-separator px-5 py-3 text-[13px] font-medium text-muted-foreground transition-colors hover:text-foreground group-open:hidden sm:px-6">Ver las {requested.length - 5} restantes</summary>
                 <AppointmentList appointments={requested.slice(5)} manage showDate />
               </details>
             )}

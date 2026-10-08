@@ -1,6 +1,5 @@
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowDownToLine, ArrowUpFromLine, ChevronLeft, Snowflake } from 'lucide-react'
+import { ArrowDownToLine, ArrowUpFromLine, Snowflake } from 'lucide-react'
 
 import { ActionButton, ActionForm } from '@/components/ui/action-form'
 import { Badge } from '@/components/ui/badge'
@@ -9,7 +8,7 @@ import { Dialog } from '@/components/ui/dialog'
 import { EmptyState } from '@/components/ui/empty-state'
 import { Field, FieldGrid, Input, Select } from '@/components/ui/field'
 import { DescriptionItem, DescriptionList, List, ListItem } from '@/components/ui/list'
-import { PageHeader, SectionTitle } from '@/components/ui/page-header'
+import { BackLink, PageHeader, SectionTitle } from '@/components/ui/page-header'
 import { KpiGrid } from '@/components/charts/figures'
 import { canAccess } from '@/modules/auth/permissions'
 import { requireStaff } from '@/modules/auth/session'
@@ -36,9 +35,7 @@ export default async function ItemPage({ params }: PageProps<'/sistema/inventari
 
   return (
     <>
-      <Link href="/sistema/inventario" className="-ml-1 mb-6 inline-flex items-center gap-0.5 text-[14px] text-accent-foreground hover:underline">
-        <ChevronLeft size={17} aria-hidden="true" /> Inventario
-      </Link>
+      <BackLink href="/sistema/inventario">Inventario</BackLink>
       <PageHeader
         eyebrow={`${item.sku} · ${itemKindLabels[item.kind]}`}
         title={item.name}

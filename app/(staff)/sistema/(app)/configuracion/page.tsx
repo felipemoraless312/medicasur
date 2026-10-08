@@ -23,7 +23,7 @@ export default async function SettingsPage() {
     <>
       <PageHeader title="Configuración" description="Clínica, usuarios y preferencias." />
 
-      <SectionTitle action={<NotifyButton message="Invitaciones disponibles próximamente" className={buttonVariants({ variant: 'link', size: 'sm' })}><UserPlus /> Invitar</NotifyButton>}>
+      <SectionTitle action={<NotifyButton message="Invitaciones disponibles próximamente" className={buttonVariants({ variant: 'secondary', size: 'sm' })}><UserPlus /> Invitar</NotifyButton>}>
         Equipo
       </SectionTitle>
       <Card className="py-1.5">
@@ -47,12 +47,12 @@ export default async function SettingsPage() {
       <SectionTitle>Seguridad</SectionTitle>
       <Card className="py-1.5">
         <DescriptionList>
-          <DescriptionItem label="Bitácora de auditoría"><Link href="/sistema/bitacora" className="text-accent-foreground hover:underline">Activa · ver eventos</Link></DescriptionItem>
-          <DescriptionItem label="Firma de notas clínicas"><Badge tone="accent">Sello SHA-256 (demo)</Badge></DescriptionItem>
-          <DescriptionItem label="Firma electrónica avanzada (e.firma)"><Badge tone="warning">Fase 2</Badge></DescriptionItem>
-          <DescriptionItem label="Autenticación de dos factores"><Badge tone="warning">Fase 2</Badge></DescriptionItem>
-          <DescriptionItem label="Base de datos persistente"><Badge tone="warning">Fase 2 · los datos de la demo viven en memoria</Badge></DescriptionItem>
-          <DescriptionItem label="Recordatorios de citas"><Badge tone="warning">Fase 3</Badge></DescriptionItem>
+          <DescriptionItem label="Bitácora de auditoría"><Link href="/sistema/bitacora" className="link-quiet">Activa · ver eventos</Link></DescriptionItem>
+          <DescriptionItem label="Firma de notas clínicas"><Badge tone="success">Sello SHA-256 (demo)</Badge></DescriptionItem>
+          <DescriptionItem label="Firma electrónica avanzada (e.firma)"><Badge>Fase 2</Badge></DescriptionItem>
+          <DescriptionItem label="Autenticación de dos factores"><Badge>Fase 2</Badge></DescriptionItem>
+          <DescriptionItem label="Base de datos persistente"><Badge>Fase 2 · los datos de la demo viven en memoria</Badge></DescriptionItem>
+          <DescriptionItem label="Recordatorios de citas"><Badge>Fase 3</Badge></DescriptionItem>
         </DescriptionList>
       </Card>
     </>

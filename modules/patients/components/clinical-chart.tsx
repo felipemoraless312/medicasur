@@ -20,16 +20,16 @@ import {
 export function AllergyNotice({ patient }: { patient: Patient }) {
   if (!patient.allergies.length) {
     return (
-      <div className="flex gap-3 rounded-2xl bg-muted p-4 text-muted-foreground">
-        <ShieldAlert size={19} className="mt-0.5 shrink-0" aria-hidden="true" />
-        <p className="text-[14px] leading-6">Sin alergias conocidas. Confirmar con el paciente antes de prescribir o administrar medicamentos.</p>
+      <div className="flex gap-3 rounded-lg border border-border bg-surface px-4 py-3 text-muted-foreground">
+        <ShieldAlert size={17} className="mt-0.5 shrink-0" aria-hidden="true" />
+        <p className="text-[13px] leading-5">Sin alergias conocidas. Confirmar con el paciente antes de prescribir o administrar medicamentos.</p>
       </div>
     )
   }
   return (
-    <div role="alert" className="flex gap-3 rounded-2xl bg-danger-soft p-4 text-danger">
-      <ShieldAlert size={19} className="mt-0.5 shrink-0" aria-hidden="true" />
-      <div className="text-[14px] leading-6">
+    <div role="alert" className="flex gap-3 rounded-lg border border-danger/20 border-l-[3px] border-l-danger bg-danger-soft px-4 py-3 text-danger">
+      <ShieldAlert size={17} className="mt-0.5 shrink-0" aria-hidden="true" />
+      <div className="text-[13px] leading-5">
         <p className="font-semibold">Alergias: {patient.allergies.map((a) => a.agent).join(', ')}</p>
         <ul className="mt-0.5">
           {patient.allergies.map((a) => <li key={a.id}>{a.agent} ({allergyKindLabels[a.kind].toLowerCase()}, {a.severity}): {a.reaction}</li>)}
@@ -44,9 +44,9 @@ export function DeviceNotice({ devices }: { devices: ImplantedDevice[] }) {
   const risky = devices.filter((d) => d.mriSafety !== 'segura')
   if (!risky.length) return null
   return (
-    <div className="flex gap-3 rounded-2xl bg-warning-soft p-4 text-warning">
-      <Magnet size={19} className="mt-0.5 shrink-0" aria-hidden="true" />
-      <p className="text-[14px] leading-6">
+    <div className="flex gap-3 rounded-lg border border-warning/20 border-l-[3px] border-l-warning bg-warning-soft px-4 py-3 text-warning">
+      <Magnet size={17} className="mt-0.5 shrink-0" aria-hidden="true" />
+      <p className="text-[13px] leading-5">
         <b className="font-semibold">Dispositivo implantado: </b>
         {risky.map((d) => `${d.type} ${d.brand}${d.model ? ` ${d.model}` : ''} (${mriSafetyLabels[d.mriSafety].toLowerCase()})`).join('; ')}.
       </p>
@@ -59,12 +59,12 @@ export function DeviceNotice({ devices }: { devices: ImplantedDevice[] }) {
 function Measure({ label, value, unit, flag }: { label: string; value?: React.ReactNode; unit?: string; flag?: Flag }) {
   return (
     <div>
-      <dt className="text-[13px] text-muted-foreground">{label}</dt>
-      <dd className={cn('mt-1 text-[17px] font-semibold tabular-nums', flag?.tone === 'danger' && 'text-danger', flag?.tone === 'warning' && 'text-warning')}>
+      <dt className="text-[12px] text-muted-foreground">{label}</dt>
+      <dd className={cn('mt-1 text-[17px] font-semibold tracking-[-0.01em] tabular-nums', flag?.tone === 'danger' && 'text-danger', flag?.tone === 'warning' && 'text-warning')}>
         {value ?? <span className="text-subtle">—</span>}
-        {value !== undefined && unit && <span className="ml-1 text-[13px] font-normal text-muted-foreground">{unit}</span>}
+        {value !== undefined && unit && <span className="ml-1 text-[12px] font-normal tracking-normal text-muted-foreground">{unit}</span>}
       </dd>
-      {flag && <dd className={cn('mt-0.5 text-xs font-medium', flag.tone === 'danger' ? 'text-danger' : 'text-warning')}>{flag.label}</dd>}
+      {flag && <dd className={cn('mt-0.5 text-[12px] font-medium', flag.tone === 'danger' ? 'text-danger' : 'text-warning')}>{flag.label}</dd>}
     </div>
   )
 }
@@ -86,7 +86,7 @@ export function VitalsCard({ vitals, action }: { vitals?: VitalSigns; action?: R
     <Card>
       <CardHeader title="Signos vitales" description={`${formatDateTime(vitals.takenAt)} · ${vitals.recordedBy}`} action={action} />
       {score && (
-        <div className="mx-5 mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl bg-muted px-4 py-3 sm:mx-6">
+        <div className="mx-5 mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-border bg-surface px-3.5 py-2.5 sm:mx-6">
           <Badge tone={score.tone}>NEWS2 {score.score}</Badge>
           <span className="text-[13px] leading-5 text-muted-foreground">Riesgo {score.risk.replace('-', ' ')}. {score.response}</span>
         </div>
@@ -117,16 +117,16 @@ export function VitalsTable({ vitals }: { vitals: VitalSigns[] }) {
   return (
     <Card className="overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-[14px]">
-          <thead className="border-b border-separator text-[12px] text-muted-foreground">
-            <tr>{['Fecha', 'TA', 'FC', 'FR', 'Temp.', 'SpO₂', 'Gluc.', 'Peso', 'EVA', 'NEWS2', 'Registró'].map((h) => <th key={h} scope="col" className="whitespace-nowrap px-3 py-3 font-medium first:pl-5">{h}</th>)}</tr>
+        <table className="w-full text-left text-[13px]">
+          <thead className="border-b border-border bg-surface text-[12px] text-muted-foreground">
+            <tr>{['Fecha', 'TA', 'FC', 'FR', 'Temp.', 'SpO₂', 'Gluc.', 'Peso', 'EVA', 'NEWS2', 'Registró'].map((h) => <th key={h} scope="col" className="h-10 whitespace-nowrap px-3 font-medium first:pl-5">{h}</th>)}</tr>
           </thead>
           <tbody className="divide-y divide-separator">
             {rows.map((v) => {
               const flags = vitalFlags(v)
               const score = news2(v)
               return (
-                <tr key={v.id}>
+                <tr key={v.id} className="transition-colors hover:bg-surface">
                   <td className="whitespace-nowrap py-3 pl-5 pr-3 text-muted-foreground">{formatDateTime(v.takenAt)}</td>
                   {cell(v.systolic !== undefined ? `${v.systolic}/${v.diastolic}` : undefined, flags.bloodPressure)}
                   {cell(v.heartRate, flags.heartRate)}
@@ -157,7 +157,7 @@ export function ProblemList({ problems, actions }: { problems: Problem[]; action
       {problems.map((p) => (
         <ListItem
           key={p.id}
-          leading={<span className="w-14 shrink-0 font-mono text-[13px] font-semibold text-accent-foreground">{p.code ?? '—'}</span>}
+          leading={<span className="w-14 shrink-0 font-mono text-[12px] font-medium text-foreground">{p.code ?? '—'}</span>}
           title={p.description}
           description={[p.kind === 'cronico' ? 'Crónico' : 'Agudo', `desde ${formatDate(p.since, 'medium')}`, p.notes].filter(Boolean).join(' · ')}
           trailing={<span className="flex items-center gap-2"><Badge tone={problemStatus[p.status].tone}>{problemStatus[p.status].label}</Badge>{actions?.(p)}</span>}
@@ -198,8 +198,8 @@ export function StudyCard({ study, actions }: { study: Study; actions?: React.Re
     <Card>
       <div className="flex flex-wrap items-start justify-between gap-3 px-5 pt-5 sm:px-6">
         <div className="min-w-0">
-          <p className="text-[12px] font-medium text-muted-foreground">{studyCategoryLabels[study.category]} · {study.folio}{study.priority === 'urgente' && ' · Urgente'}</p>
-          <h3 className="mt-0.5 font-semibold">{study.name}</h3>
+          <p className="text-[12px] text-muted-foreground">{studyCategoryLabels[study.category]} · <span className="font-mono">{study.folio}</span>{study.priority === 'urgente' && <span className="font-medium text-danger"> · Urgente</span>}</p>
+          <h3 className="mt-1 text-[15px] font-semibold">{study.name}</h3>
           <p className="mt-0.5 text-[13px] text-subtle">Solicitado {formatDateTime(study.orderedAt)} · {study.orderedBy}{study.indication && ` · ${study.indication}`}</p>
         </div>
         <Badge tone={studyStatus[study.status].tone}>{studyStatus[study.status].label}</Badge>
@@ -210,7 +210,7 @@ export function StudyCard({ study, actions }: { study: Study; actions?: React.Re
           {study.result.values.length > 0 && (
             <div className="mt-3 overflow-x-auto">
               <table className="w-full text-[13px]">
-                <thead className="text-muted-foreground"><tr><th className="py-1.5 text-left font-medium">Analito</th><th className="py-1.5 text-right font-medium">Resultado</th><th className="py-1.5 pl-4 text-right font-medium">Referencia</th></tr></thead>
+                <thead className="border-b border-border text-[12px] text-muted-foreground"><tr><th className="py-1.5 text-left font-medium">Analito</th><th className="py-1.5 text-right font-medium">Resultado</th><th className="py-1.5 pl-4 text-right font-medium">Referencia</th></tr></thead>
                 <tbody className="divide-y divide-separator">
                   {study.result.values.map((v) => (
                     <tr key={v.analyte}>
@@ -237,18 +237,18 @@ export function NoteTimeline({ notes, hrefFor, compact = false }: { notes: Clini
   if (!notes.length) return <Card><EmptyState icon={FileText} title="Sin notas clínicas" /></Card>
   return (
     <Card className="p-5 sm:p-6">
-      <ol className="space-y-7">
+      <ol className="divide-y divide-separator [&>li]:py-6 [&>li:first-child]:pt-0 [&>li:last-child]:pb-0">
         {notes.map((note) => {
           const template = noteTemplates[note.type]
           const summary = note.sections.plan ?? note.sections.subjetivo ?? note.sections.motivo ?? note.sections.valoracion ?? Object.values(note.sections)[0]
           const title = hrefFor ? <Link href={hrefFor(note)} className="hover:underline">{template.label}</Link> : template.label
           return (
             <li key={note.id} className="grid gap-1 sm:grid-cols-[9.5rem_1fr] sm:gap-6">
-              <time dateTime={note.createdAt} className="text-[13px] font-medium text-muted-foreground tabular-nums">{formatDateTime(note.createdAt)}</time>
+              <time dateTime={note.createdAt} className="text-[13px] text-muted-foreground tabular-nums sm:pt-0.5">{formatDateTime(note.createdAt)}</time>
               <div className="min-w-0">
-                <h3 className="font-semibold">{title}</h3>
-                {note.diagnoses.length > 0 && <p className="mt-1 text-[13px] text-accent-foreground">{note.diagnoses.map((d) => (d.code ? `${d.code} ${d.description}` : d.description)).join(' · ')}</p>}
-                {summary && <p className={cn('mt-1 leading-6 text-muted-foreground', compact && 'line-clamp-3')}>{summary}</p>}
+                <h3 className="text-[15px] font-semibold">{title}</h3>
+                {note.diagnoses.length > 0 && <p className="mt-1 text-[13px] font-medium text-foreground">{note.diagnoses.map((d) => (d.code ? `${d.code} ${d.description}` : d.description)).join(' · ')}</p>}
+                {summary && <p className={cn('mt-1 text-[14px] leading-6 text-muted-foreground', compact && 'line-clamp-3')}>{summary}</p>}
                 <p className="mt-2 text-[13px] text-subtle">{note.author} · {note.authorRole}{note.addenda.length > 0 && ` · ${note.addenda.length} adenda(s)`}</p>
               </div>
             </li>
@@ -315,7 +315,7 @@ export function DocumentsList({ documents, action }: { documents: ClinicalDocume
 
 export function ClinicalWarning({ children }: { children: React.ReactNode }) {
   return (
-    <p className="flex gap-2 rounded-xl bg-warning-soft px-4 py-3 text-[13px] leading-5 text-warning">
+    <p className="flex gap-2 rounded-lg border border-warning/20 bg-warning-soft px-3.5 py-2.5 text-[13px] leading-5 text-warning">
       <TriangleAlert size={16} className="mt-0.5 shrink-0" aria-hidden="true" />
       <span>{children}</span>
     </p>

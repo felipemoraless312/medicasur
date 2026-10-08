@@ -23,12 +23,12 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={notify}>
       {children}
-      <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] z-[60] flex justify-center px-4 md:bottom-8">
+      <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] z-60 flex justify-center px-4 md:bottom-8">
         {toast && (
-          <div className="material animate-rise flex max-w-md items-center gap-2.5 rounded-2xl px-5 py-3 text-sm font-medium shadow-float">
+          <div className="animate-rise flex max-w-md items-center gap-2.5 rounded-full bg-primary px-5 py-2.5 text-[13px] font-medium text-primary-foreground shadow-float">
             {toast.tone === 'error'
-              ? <CircleAlert size={17} className="shrink-0 text-danger" aria-hidden="true" />
-              : <CheckCircle2 size={17} className="shrink-0 text-success" aria-hidden="true" />}
+              ? <CircleAlert size={16} className="shrink-0 text-[#f0a49b]" aria-hidden="true" />
+              : <CheckCircle2 size={16} className="shrink-0 text-white/70" aria-hidden="true" />}
             {toast.message}
           </div>
         )}

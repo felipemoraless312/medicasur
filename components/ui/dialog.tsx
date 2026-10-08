@@ -60,12 +60,12 @@ export function Dialog({ trigger, triggerLabel, triggerStyle, triggerClassName, 
         {open && (
           <DialogContext.Provider value={{ close }}>
             <div className="flex max-h-[inherit] flex-col">
-              <div className="flex items-start justify-between gap-4 border-b border-separator px-5 pb-4 pt-5 sm:px-6">
+              <div className="flex items-start justify-between gap-4 border-b border-border px-5 py-4 sm:px-6">
                 <div className="min-w-0">
-                  <h2 className="text-title-3">{title}</h2>
-                  {description && <p className="mt-1 text-[13px] leading-5 text-muted-foreground">{description}</p>}
+                  <h2 className="text-[16px] font-semibold leading-6">{title}</h2>
+                  {description && <p className="mt-0.5 text-[13px] leading-5 text-muted-foreground">{description}</p>}
                 </div>
-                <button type="button" onClick={close} aria-label="Cerrar" className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground hover:text-foreground">
+                <button type="button" onClick={close} aria-label="Cerrar" className="-mr-1.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
                   <X size={16} />
                 </button>
               </div>

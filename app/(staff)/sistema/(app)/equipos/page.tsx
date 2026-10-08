@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card'
 import { EmptyState } from '@/components/ui/empty-state'
 import { FilterForm, FilterSelect } from '@/components/ui/filter-form'
 import { List, ListItem } from '@/components/ui/list'
-import { PageHeader } from '@/components/ui/page-header'
+import { PageHeader, SectionTitle } from '@/components/ui/page-header'
 import { ColumnChart } from '@/components/charts/column-chart'
 import { ChartCard, KpiGrid, Meter, PartBar, StackedBarList } from '@/components/charts/figures'
 import { canAccess } from '@/modules/auth/permissions'
@@ -59,7 +59,7 @@ export default async function EquipmentPage({ searchParams }: PageProps<'/sistem
       ]} />
 
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
-        <ChartCard className="lg:col-span-2" title="Servicios por vencer" description="Próximas 12 semanas; la primera incluye lo vencido" action={<Link href="/sistema/equipos/ordenes?vista=programa" className="text-[13px] font-medium text-accent-foreground hover:underline">Programa</Link>}>
+        <ChartCard className="lg:col-span-2" title="Servicios por vencer" description="Próximas 12 semanas; la primera incluye lo vencido" action={<Link href="/sistema/equipos/ordenes?vista=programa" className="text-[13px] font-medium link-quiet">Programa</Link>}>
           <ColumnChart
             caption="Servicios de mantenimiento por vencer por semana"
             height={170}
@@ -96,15 +96,15 @@ export default async function EquipmentPage({ searchParams }: PageProps<'/sistem
               rows={breakdown.byArea.map((a) => ({ label: a.area, values: a.values, href: `/sistema/equipos?area=${encodeURIComponent(a.area)}` }))}
               series={[
                 { key: 'operativo', name: 'Operativo', color: 'var(--series-1)' },
-                { key: 'en-mantenimiento', name: 'En mantenimiento', color: 'var(--series-4)' },
-                { key: 'fuera-de-servicio', name: 'Fuera de servicio', color: 'var(--series-2)' },
+                { key: 'en-mantenimiento', name: 'En mantenimiento', color: 'var(--warning)' },
+                { key: 'fuera-de-servicio', name: 'Fuera de servicio', color: 'var(--danger)' },
               ]}
             />
           </div>
         </ChartCard>
       </div>
 
-      <h2 className="mb-3 mt-10 px-1 text-title-3">Inventario de equipos</h2>
+      <SectionTitle>Inventario de equipos</SectionTitle>
 
       <FilterForm action="/sistema/equipos" query={filter.q} placeholder="Buscar por nombre, marca, serie o inventario">
         <FilterSelect name="area" value={filter.area} label="Todas las áreas" options={areas.map((a) => ({ value: a, label: a }))} />
@@ -136,7 +136,7 @@ export default async function EquipmentPage({ searchParams }: PageProps<'/sistem
         ) : <EmptyState icon={Wrench} title="Sin equipos con esos filtros" />}
       </Card>
 
-      <p className="mt-6 flex items-start gap-2 px-1 text-[13px] leading-5 text-subtle">
+      <p className="mt-6 flex items-start gap-2 text-[12px] leading-5 text-subtle">
         <ShieldAlert size={16} className="mt-0.5 shrink-0" aria-hidden="true" />
         Cualquier usuario puede reportar una falla o un incidente adverso desde la ficha del equipo. Los incidentes se gestionan en Tecnovigilancia (NOM-240-SSA1-2012).
       </p>

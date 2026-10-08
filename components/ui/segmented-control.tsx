@@ -21,8 +21,8 @@ export function SegmentedControl<T extends string>({ options, value, onChange, l
             aria-checked={selected}
             onClick={() => onChange(option.value)}
             className={cn(
-              'h-8 shrink-0 rounded-full px-4 text-[13px] font-medium transition-[background-color,color,box-shadow] duration-200',
-              selected ? 'bg-card text-foreground shadow-card' : 'text-muted-foreground hover:text-foreground',
+              'h-8 shrink-0 rounded-full px-3.5 text-[13px] font-medium transition-[background-color,color,box-shadow] duration-150',
+              selected ? 'bg-card text-foreground shadow-[0_0_0_1px_var(--border),0_1px_2px_rgb(0_0_0/0.04)]' : 'text-muted-foreground hover:text-foreground',
             )}
           >
             {option.label}

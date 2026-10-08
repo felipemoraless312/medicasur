@@ -27,7 +27,7 @@ export default async function TechnovigilancePage() {
         { label: 'Notificados a COFEPRIS', value: String(reports.filter((r) => r.cofeprisFolio).length) },
       ]} />
       <Card className="mt-6 py-1.5"><IncidentList reports={reports} manage={canAccess(user.role, 'equipment.manage')} showEquipment /></Card>
-      <p className="mt-6 px-1 text-[13px] leading-5 text-subtle">
+      <p className="mt-6 text-[12px] leading-5 text-subtle">
         La norma obliga a notificar a COFEPRIS los incidentes adversos graves y a contar con un responsable de tecnovigilancia en la unidad. Conserva el dispositivo involucrado y su empaque hasta concluir la investigación.
       </p>
     </>

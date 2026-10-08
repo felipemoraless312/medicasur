@@ -46,7 +46,7 @@ export default async function InpatientPage() {
           <ul className="mt-6 space-y-1.5 border-t border-separator pt-4 text-[13px]">
             {(Object.keys(bedStatus) as BedStatus[]).map((s) => (
               <li key={s} className="flex items-center justify-between gap-2">
-                <span className="flex items-center gap-2 text-muted-foreground"><span className="size-2.5 rounded-[3px]" style={{ background: bedStatus[s].color }} />{bedStatus[s].label}</span>
+                <span className="flex items-center gap-2 text-muted-foreground"><span className="size-2 rounded-xs" style={{ background: bedStatus[s].color }} />{bedStatus[s].label}</span>
                 <b className="font-semibold tabular-nums">{count(s)}</b>
               </li>
             ))}
@@ -55,8 +55,8 @@ export default async function InpatientPage() {
 
         <div className="space-y-4">
           {areas.map((area) => (
-            <section key={area} className="rounded-2xl bg-card p-4 shadow-card sm:p-5" aria-label={`Mapa de camas de ${area}`}>
-              <h2 className="mb-3 text-[15px] font-semibold">{area}</h2>
+            <section key={area} className="rounded-xl border border-border bg-card p-4 sm:p-5" aria-label={`Mapa de camas de ${area}`}>
+              <h2 className="mb-3 text-[14px] font-semibold">{area}</h2>
               <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5">
                 {beds.filter((b) => b.area === area).map((bed) => <BedTile key={bed.id} bed={bed} canOpen={canOpen} />)}
               </ul>
@@ -64,7 +64,7 @@ export default async function InpatientPage() {
           ))}
         </div>
       </div>
-      <p className="mt-6 px-1 text-xs text-subtle">Censo de demostración con datos ficticios. Se conectará con ingresos, traslados y la nota de egreso del expediente.</p>
+      <p className="mt-6 text-[12px] text-subtle">Censo de demostración con datos ficticios. Se conectará con ingresos, traslados y la nota de egreso del expediente.</p>
     </>
   )
 }
@@ -86,11 +86,11 @@ function BedTile({ bed, canOpen }: { bed: Bed; canOpen: boolean }) {
       {bed.status === 'egreso' && <p className="mt-1 text-[11px] font-medium text-warning">Egreso pendiente</p>}
     </>
   )
-  const className = cn('block h-full rounded-xl border-l-[3px] bg-muted/50 p-2.5', bed.status === 'disponible' && 'bg-success-soft')
+  const className = cn('block h-full rounded-lg border border-border border-l-2 bg-surface p-2.5', bed.status === 'disponible' && 'bg-card', bed.status === 'bloqueada' && 'bg-[repeating-linear-gradient(135deg,transparent_0_6px,rgb(0_0_0/0.025)_6px_12px)]')
   return (
     <li title={`${bed.id} · ${meta.label}`}>
       {canOpen && bed.patientId
-        ? <Link href={`/sistema/pacientes/${bed.patientId}`} className={cn(className, 'hover:bg-muted')} style={{ borderLeftColor: meta.color }}>{body}</Link>
+        ? <Link href={`/sistema/pacientes/${bed.patientId}`} className={cn(className, 'transition-colors hover:border-[#c4c4c4] hover:bg-card')} style={{ borderLeftColor: meta.color }}>{body}</Link>
         : <div className={className} style={{ borderLeftColor: meta.color }}>{body}</div>}
     </li>
   )

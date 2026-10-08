@@ -52,19 +52,20 @@ export function ActionForm({ action, children, submitLabel = 'Guardar', pendingL
       {children}
 
       {state && !state.ok && (
-        <div role="alert" className="flex gap-2.5 rounded-xl bg-danger-soft px-4 py-3 text-[14px] leading-5 text-danger">
-          <TriangleAlert size={17} className="mt-0.5 shrink-0" aria-hidden="true" />
+        <div role="alert" className="flex gap-2.5 rounded-lg border border-danger/20 bg-danger-soft px-3.5 py-3 text-[13px] leading-5 text-danger">
+          <TriangleAlert size={16} className="mt-0.5 shrink-0" aria-hidden="true" />
           <span>{state.error}</span>
         </div>
       )}
       {state && !state.ok && state.confirm && (
-        <label className="flex items-start gap-3 rounded-xl border border-danger/30 px-4 py-3 text-[14px]">
-          <input type="checkbox" name="confirm" required className="mt-0.5 size-4 accent-[var(--danger)]" />
+        <label className="flex items-start gap-3 rounded-lg border border-input px-3.5 py-3 text-[13px] leading-5">
+          <input type="checkbox" name="confirm" required className="mt-0.5 size-4 accent-(--danger)" />
           {state.confirm}
         </label>
       )}
 
-      <div className="flex flex-wrap items-center justify-end gap-2 pt-1">
+      {/* En un diálogo, las acciones van en una franja fija al pie; en página, alineadas al final del formulario. */}
+      <div className={cn('flex flex-wrap items-center justify-end gap-2', dialog ? 'sticky bottom-0 -mx-5 -mb-[calc(env(safe-area-inset-bottom)+1.25rem)] border-t border-border bg-card px-5 pb-[calc(env(safe-area-inset-bottom)+0.875rem)] pt-3.5 sm:-mx-6 sm:px-6' : 'border-t border-separator pt-5')}>
         {cancel && dialog && <Button type="button" variant="ghost" onClick={dialog.close}>Cancelar</Button>}
         <Button type="submit" disabled={pending} variant={submitStyle?.variant} size={submitStyle?.size}>{pending ? pendingLabel : submitLabel}</Button>
       </div>

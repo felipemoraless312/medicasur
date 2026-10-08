@@ -19,7 +19,7 @@ export default function BookingPage() {
     .slice(0, 10)
 
   return (
-    <div className="mx-auto max-w-2xl px-5 py-14 sm:py-20">
+    <div className="mx-auto max-w-2xl px-5 pb-20 pt-10 sm:pb-24 sm:pt-16">
       <BookingWizard services={[...clinic.bookableServices]} days={days} slots={slots} />
     </div>
   )

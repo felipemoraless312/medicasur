@@ -1,10 +1,7 @@
-import Link from 'next/link'
-import { ChevronLeft } from 'lucide-react'
-
 import { ActionForm } from '@/components/ui/action-form'
 import { Card } from '@/components/ui/card'
 import { Checkbox, Field, FieldGrid, FormSection, Input, Select } from '@/components/ui/field'
-import { PageHeader } from '@/components/ui/page-header'
+import { BackLink, PageHeader } from '@/components/ui/page-header'
 import { requireStaff } from '@/modules/auth/session'
 import { createItem } from '@/modules/inventory/actions'
 import { controlledGroups, itemKindLabels, itemKinds, locationLabels, locations, units } from '@/modules/inventory/types'
@@ -16,9 +13,7 @@ export default async function NewItemPage() {
 
   return (
     <>
-      <Link href="/sistema/inventario" className="-ml-1 mb-6 inline-flex items-center gap-0.5 text-[14px] text-accent-foreground hover:underline">
-        <ChevronLeft size={17} aria-hidden="true" /> Inventario
-      </Link>
+      <BackLink href="/sistema/inventario">Inventario</BackLink>
       <PageHeader title="Nuevo artículo" description="La existencia se registra después, con la entrada de cada lote y su caducidad." />
       <Card className="p-5 sm:p-8">
         <ActionForm action={createItem} submitLabel="Dar de alta" className="space-y-10">

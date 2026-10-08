@@ -15,11 +15,11 @@ import type { BadgeTone } from '@/components/ui/badge'
 
 /** Sistema de triage Manchester: 5 niveles con tiempo máximo para la primera valoración médica. */
 export const triageLevels = {
-  rojo: { label: 'Rojo · inmediato', short: 'Rojo', target: 0, tone: 'danger', color: 'var(--danger)' },
-  naranja: { label: 'Naranja · muy urgente', short: 'Naranja', target: 10, tone: 'warning', color: 'var(--series-2)' },
-  amarillo: { label: 'Amarillo · urgente', short: 'Amarillo', target: 60, tone: 'warning', color: 'var(--series-4)' },
-  verde: { label: 'Verde · poco urgente', short: 'Verde', target: 120, tone: 'success', color: 'var(--series-3)' },
-  azul: { label: 'Azul · no urgente', short: 'Azul', target: 240, tone: 'accent', color: 'var(--series-1)' },
+  rojo: { label: 'Rojo · inmediato', short: 'Rojo', target: 0, tone: 'danger', color: 'var(--triage-red)' },
+  naranja: { label: 'Naranja · muy urgente', short: 'Naranja', target: 10, tone: 'warning', color: 'var(--triage-orange)' },
+  amarillo: { label: 'Amarillo · urgente', short: 'Amarillo', target: 60, tone: 'warning', color: 'var(--triage-yellow)' },
+  verde: { label: 'Verde · poco urgente', short: 'Verde', target: 120, tone: 'success', color: 'var(--triage-green)' },
+  azul: { label: 'Azul · no urgente', short: 'Azul', target: 240, tone: 'accent', color: 'var(--triage-blue)' },
 } as const satisfies Record<string, { label: string; short: string; target: number; tone: BadgeTone; color: string }>
 export type TriageLevel = keyof typeof triageLevels
 
@@ -51,11 +51,11 @@ export async function getEmergencyBoard() {
 // ── Hospitalización ─────────────────────────────────────────────────────────────
 
 export const bedStatus = {
-  ocupada: { label: 'Ocupada', tone: 'accent', color: 'var(--series-1)' },
-  disponible: { label: 'Disponible', tone: 'success', color: 'var(--series-3)' },
-  limpieza: { label: 'En limpieza', tone: 'warning', color: 'var(--series-4)' },
-  egreso: { label: 'Egreso pendiente', tone: 'warning', color: 'var(--series-2)' },
-  bloqueada: { label: 'Bloqueada', tone: 'neutral', color: 'var(--subtle)' },
+  ocupada: { label: 'Ocupada', tone: 'accent', color: 'var(--foreground)' },
+  disponible: { label: 'Disponible', tone: 'success', color: 'var(--success)' },
+  limpieza: { label: 'En limpieza', tone: 'warning', color: 'var(--series-2)' },
+  egreso: { label: 'Egreso pendiente', tone: 'warning', color: 'var(--warning)' },
+  bloqueada: { label: 'Bloqueada', tone: 'neutral', color: 'var(--series-3)' },
 } as const satisfies Record<string, { label: string; tone: BadgeTone; color: string }>
 export type BedStatus = keyof typeof bedStatus
 
@@ -96,10 +96,10 @@ export async function getInpatientBoard() {
 // ── Quirófano y endoscopía ──────────────────────────────────────────────────────
 
 export const procedureStatus = {
-  programado: { label: 'Programado', tone: 'neutral', color: 'var(--grid)' },
-  preparacion: { label: 'En preparación', tone: 'warning', color: 'var(--series-4)' },
-  'en-curso': { label: 'En curso', tone: 'accent', color: 'var(--series-1)' },
-  concluido: { label: 'Concluido', tone: 'success', color: 'var(--series-3)' },
+  programado: { label: 'Programado', tone: 'neutral', color: 'var(--series-3)' },
+  preparacion: { label: 'En preparación', tone: 'warning', color: 'var(--warning)' },
+  'en-curso': { label: 'En curso', tone: 'accent', color: 'var(--foreground)' },
+  concluido: { label: 'Concluido', tone: 'success', color: 'var(--success)' },
 } as const satisfies Record<string, { label: string; tone: BadgeTone; color: string }>
 export type ProcedureStatus = keyof typeof procedureStatus
 

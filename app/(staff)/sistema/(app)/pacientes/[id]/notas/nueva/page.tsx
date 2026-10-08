@@ -1,12 +1,10 @@
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ChevronLeft } from 'lucide-react'
 
 import { ActionForm } from '@/components/ui/action-form'
 import { Card, CardHeader } from '@/components/ui/card'
 import { Checkbox, Field, Input, Select, Textarea } from '@/components/ui/field'
 import { LinkTabs } from '@/components/ui/link-tabs'
-import { PageHeader } from '@/components/ui/page-header'
+import { BackLink, PageHeader } from '@/components/ui/page-header'
 import { canAccess } from '@/modules/auth/permissions'
 import { requireStaff } from '@/modules/auth/session'
 import { createNote } from '@/modules/patients/actions'
@@ -33,16 +31,14 @@ export default async function NewNotePage({ params, searchParams }: PageProps<'/
 
   return (
     <>
-      <Link href={`/sistema/pacientes/${patient.id}?seccion=notas`} className="-ml-1 mb-6 inline-flex items-center gap-0.5 text-[14px] text-accent-foreground hover:underline">
-        <ChevronLeft size={17} aria-hidden="true" /> {patient.name}
-      </Link>
+      <BackLink href={`/sistema/pacientes/${patient.id}?seccion=notas`}>{patient.name}</BackLink>
       <PageHeader eyebrow={`${patient.record} · ${ageFrom(patient.birthDate)} años`} title={template.label} description={template.description} />
 
       <LinkTabs label="Tipo de nota" current={type} items={allowed.map((t) => ({ key: t, label: noteTemplates[t].label, href: `/sistema/pacientes/${patient.id}/notas/nueva?tipo=${t}` }))} />
       <ChartDatalists />
 
       <div className="mt-6 grid items-start gap-6 lg:grid-cols-[1fr_20rem]">
-        <Card className="p-5 sm:p-7">
+        <Card className="p-5 sm:p-6">
           <ActionForm key={type} action={createNote} submitLabel="Firmar y guardar" pendingLabel="Firmando…" className="space-y-5">
             <input type="hidden" name="patientId" value={patient.id} />
             <input type="hidden" name="type" value={type} />
@@ -57,7 +53,7 @@ export default async function NewNotePage({ params, searchParams }: PageProps<'/
 
             {template.permission === 'notes.medical' && (
               <fieldset className="space-y-2">
-                <legend className="mb-1.5 text-[13px] font-medium text-muted-foreground">Diagnósticos (CIE-10) · el primero es el principal</legend>
+                <legend className="mb-1.5 text-[13px] font-medium">Diagnósticos (CIE-10) <span className="font-normal text-muted-foreground">· el primero es el principal</span></legend>
                 {[0, 1, 2].map((i) => (
                   <Input key={i} name="diagnoses" list="cie10-list" autoComplete="off" required={i === 0} placeholder={i === 0 ? 'Diagnóstico principal: código o descripción' : 'Diagnóstico secundario (opcional)'} />
                 ))}
@@ -72,7 +68,7 @@ export default async function NewNotePage({ params, searchParams }: PageProps<'/
 
             {recentVitals && <Checkbox name="linkVitals" defaultChecked label={`Incluir signos vitales del ${formatDateTime(latest.takenAt)}`} />}
 
-            <div className="rounded-xl bg-muted p-4">
+            <div className="rounded-lg border border-border bg-surface p-4">
               <Checkbox
                 name="attest"
                 required

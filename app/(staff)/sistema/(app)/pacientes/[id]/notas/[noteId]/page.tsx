@@ -1,8 +1,8 @@
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { BadgeCheck, ChevronLeft } from 'lucide-react'
+import { BadgeCheck } from 'lucide-react'
 
 import { Card } from '@/components/ui/card'
+import { BackLink } from '@/components/ui/page-header'
 import { clinic } from '@/config/clinic'
 import { canAccess } from '@/modules/auth/permissions'
 import { requireStaff } from '@/modules/auth/session'
@@ -28,23 +28,21 @@ export default async function NotePage({ params }: PageProps<'/sistema/pacientes
   return (
     <>
       <div className="no-print mb-6 flex flex-wrap items-center justify-between gap-3">
-        <Link href={`/sistema/pacientes/${patient.id}?seccion=notas`} className="-ml-1 inline-flex items-center gap-0.5 text-[14px] text-accent-foreground hover:underline">
-          <ChevronLeft size={17} aria-hidden="true" /> Notas de {patient.name}
-        </Link>
+        <BackLink className="mb-0" href={`/sistema/pacientes/${patient.id}?seccion=notas`}>Notas de {patient.name}</BackLink>
         <div className="flex gap-2">
           {canAccess(user.role, 'record.write') && <AddendumDialog patientId={patient.id} noteId={note.id} />}
           <PrintButton />
         </div>
       </div>
 
-      <Card className="p-6 sm:p-10 print:p-0 print:shadow-none">
+      <Card className="mx-auto max-w-4xl p-6 sm:p-10 print:max-w-none print:border-0 print:p-0">
         <header className="flex flex-wrap items-start justify-between gap-4 border-b border-separator pb-5">
           <div>
             <p className="text-[13px] font-semibold">{clinic.name}</p>
             <p className="text-[12px] text-muted-foreground">{clinic.address.lines.join(', ')} · Aviso sanitario {clinic.sanitaryNotice}</p>
           </div>
           <div className="text-right">
-            <h1 className="text-title-3">{template.label}</h1>
+            <h1 className="text-[17px] font-semibold tracking-[-0.01em]">{template.label}</h1>
             <p className="text-[13px] text-muted-foreground">{formatDateTime(note.createdAt)}</p>
           </div>
         </header>
@@ -92,7 +90,7 @@ export default async function NotePage({ params }: PageProps<'/sistema/pacientes
           <div className="space-y-3 border-t border-separator py-5">
             <h2 className="text-[13px] font-semibold text-muted-foreground">Adendas</h2>
             {note.addenda.map((a, i) => (
-              <div key={i} className="rounded-xl bg-muted p-4">
+              <div key={i} className="rounded-lg border border-border bg-surface p-4">
                 <p className="whitespace-pre-line leading-6">{a.text}</p>
                 <p className="mt-2 text-[12px] text-subtle">{a.author} · {formatDateTime(a.at)}</p>
               </div>

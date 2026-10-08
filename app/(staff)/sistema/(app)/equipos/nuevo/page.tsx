@@ -1,10 +1,7 @@
-import Link from 'next/link'
-import { ChevronLeft } from 'lucide-react'
-
 import { ActionForm } from '@/components/ui/action-form'
 import { Card } from '@/components/ui/card'
 import { Checkbox, Field, FieldGrid, FormSection, Input, Select, Textarea } from '@/components/ui/field'
-import { PageHeader } from '@/components/ui/page-header'
+import { BackLink, PageHeader } from '@/components/ui/page-header'
 import { requireStaff } from '@/modules/auth/session'
 import { createEquipment } from '@/modules/equipment/actions'
 import { applicationRisks, functionScores, incidentHistory, maintenanceNeeds } from '@/modules/equipment/risk'
@@ -20,9 +17,7 @@ export default async function NewEquipmentPage() {
 
   return (
     <>
-      <Link href="/sistema/equipos" className="-ml-1 mb-6 inline-flex items-center gap-0.5 text-[14px] text-accent-foreground hover:underline">
-        <ChevronLeft size={17} aria-hidden="true" /> Equipos médicos
-      </Link>
+      <BackLink href="/sistema/equipos">Equipos médicos</BackLink>
       <PageHeader title="Nuevo equipo médico" description="Al guardar se crea la orden de instalación y prueba de aceptación, requisito antes de usarlo con pacientes." />
       <Card className="p-5 sm:p-8">
         <ActionForm action={createEquipment} submitLabel="Dar de alta" className="space-y-10">

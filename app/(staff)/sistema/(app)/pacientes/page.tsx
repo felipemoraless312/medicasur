@@ -60,7 +60,7 @@ export default async function PatientsPage({ searchParams }: PageProps<'/sistema
           <EmptyState icon={Users} title={query ? `Sin resultados para “${query}”` : 'Sin pacientes'} description="Verifica la búsqueda o abre un expediente nuevo." />
         )}
       </Card>
-      <p className="mt-4 px-1 text-[13px] text-subtle">{patients.length} expediente(s)</p>
+      <p className="mt-3 text-[12px] text-subtle">{patients.length} expediente(s)</p>
     </>
   )
 }

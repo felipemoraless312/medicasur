@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ChevronLeft, FilePlus2, Pencil, ScrollText } from 'lucide-react'
+import { FilePlus2, Pencil, ScrollText } from 'lucide-react'
 
 import { Avatar } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -9,7 +9,7 @@ import { Card, CardHeader } from '@/components/ui/card'
 import { EmptyState } from '@/components/ui/empty-state'
 import { LinkTabs } from '@/components/ui/link-tabs'
 import { DescriptionItem, DescriptionList, List, ListItem } from '@/components/ui/list'
-import { SectionTitle } from '@/components/ui/page-header'
+import { BackLink, SectionTitle } from '@/components/ui/page-header'
 import { auditActionLabels } from '@/modules/audit/log'
 import { listAuditEvents } from '@/modules/audit/data'
 import { canAccess, type StaffRole } from '@/modules/auth/permissions'
@@ -70,19 +70,18 @@ export default async function PatientChartPage({ params, searchParams }: PagePro
 
   return (
     <>
-      <Link href="/sistema/pacientes" className="no-print -ml-1 mb-6 inline-flex items-center gap-0.5 text-[14px] text-accent-foreground hover:underline">
-        <ChevronLeft size={17} aria-hidden="true" /> Pacientes
-      </Link>
+      <BackLink href="/sistema/pacientes">Pacientes</BackLink>
 
-      <header className="flex flex-wrap items-center gap-5">
-        <Avatar src={patient.photo} name={patient.name} size={72} />
+      <header className="flex flex-wrap items-center gap-4 sm:gap-5">
+        <Avatar src={patient.photo} name={patient.name} size={56} />
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <h1 className="text-title-1">{patient.name}</h1>
+            <h1 className="text-page-title">{patient.name}</h1>
             <Badge tone={patientStatus[patient.status].tone}>{patientStatus[patient.status].label}</Badge>
           </div>
-          <p className="mt-1.5 text-muted-foreground">
-            {patient.record} · {ageFrom(patient.birthDate)} años · {sexLabels[patient.sex]} · {patient.bloodType} · {patient.insurance.type}
+          <p className="mt-1 flex flex-wrap gap-x-2 text-[13px] text-muted-foreground">
+            <span className="font-mono text-foreground">{patient.record}</span>
+            {[`${ageFrom(patient.birthDate)} años`, sexLabels[patient.sex], patient.bloodType, patient.insurance.type].map((part, i) => <span key={i}><span aria-hidden="true" className="mr-2 text-input">/</span>{part}</span>)}
           </p>
         </div>
         <div className="no-print flex flex-wrap gap-2">
@@ -93,11 +92,11 @@ export default async function PatientChartPage({ params, searchParams }: PagePro
         </div>
       </header>
 
-      <div className="mt-6 space-y-3">
+      <div className="mt-6 space-y-2">
         <AllergyNotice patient={patient} />
         <DeviceNotice devices={record.devices} />
         {score && score.risk !== 'bajo' && (
-          <div role="alert" className="flex flex-wrap items-center gap-3 rounded-2xl bg-danger-soft p-4 text-[14px] text-danger">
+          <div role="alert" className="flex flex-wrap items-center gap-3 rounded-lg border border-danger/20 border-l-[3px] border-l-danger bg-danger-soft px-4 py-3 text-[13px] leading-5 text-danger">
             <Badge tone="danger">NEWS2 {score.score}</Badge>
             <span>{score.response} Último registro: {formatDateTime(latest!.takenAt)}.</span>
           </div>
@@ -199,14 +198,14 @@ function SummarySection({ patient, record, role, next }: { patient: Patient; rec
         </Card>
         {lastNote && (
           <Card>
-            <CardHeader title="Última nota" action={<Link href={`/sistema/pacientes/${patient.id}/notas/${lastNote.id}`} className="text-[13px] font-medium text-accent-foreground hover:underline">Ver completa</Link>} />
+            <CardHeader title="Última nota" action={<Link href={`/sistema/pacientes/${patient.id}/notas/${lastNote.id}`} className="text-[13px] font-medium link-quiet">Ver completa</Link>} />
             <div className="p-5 pt-2 sm:p-6 sm:pt-2"><NoteTimelineItem note={lastNote} /></div>
           </Card>
         )}
       </div>
       <div className="space-y-4">
         <Card>
-          <CardHeader title="Tratamiento activo" action={<Link href={`/sistema/pacientes/${patient.id}?seccion=tratamiento`} className="text-[13px] font-medium text-accent-foreground hover:underline">Ver todo</Link>} />
+          <CardHeader title="Tratamiento activo" action={<Link href={`/sistema/pacientes/${patient.id}?seccion=tratamiento`} className="text-[13px] font-medium link-quiet">Ver todo</Link>} />
           <div className="mt-2 pb-2"><MedicationList medications={record.medications.filter((m) => m.status === 'activo')} empty="Sin tratamiento activo" /></div>
         </Card>
         <Card>
@@ -214,7 +213,7 @@ function SummarySection({ patient, record, role, next }: { patient: Patient; rec
           <div className="mt-2 pb-2">
             {pending.length ? (
               <List>{pending.map((s) => <ListItem key={s.id} title={s.name} description={`${s.folio} · ${formatDate(s.orderedAt, 'medium')}${s.priority === 'urgente' ? ' · Urgente' : ''}`} href={`/sistema/pacientes/${patient.id}?seccion=estudios`} />)}</List>
-            ) : <p className="px-6 py-5 text-[14px] text-muted-foreground">Sin estudios pendientes.</p>}
+            ) : <p className="px-5 py-4 text-[13px] text-muted-foreground sm:px-6">Sin estudios pendientes.</p>}
           </div>
         </Card>
         <Card>
@@ -235,8 +234,8 @@ function NoteTimelineItem({ note }: { note: ClinicalRecord['notes'][number] }) {
   return (
     <>
       <p className="text-[13px] text-muted-foreground">{noteTemplates[note.type].label} · {formatDateTime(note.createdAt)} · {note.author}</p>
-      {note.diagnoses.length > 0 && <p className="mt-1 text-[13px] text-accent-foreground">{note.diagnoses.map((d) => `${d.code ?? ''} ${d.description}`.trim()).join(' · ')}</p>}
-      <p className="mt-2 line-clamp-4 leading-6">{summary}</p>
+      {note.diagnoses.length > 0 && <p className="mt-1 text-[13px] font-medium">{note.diagnoses.map((d) => `${d.code ?? ''} ${d.description}`.trim()).join(' · ')}</p>}
+      <p className="mt-2 line-clamp-4 text-[14px] leading-6 text-muted-foreground">{summary}</p>
     </>
   )
 }
@@ -278,14 +277,14 @@ function HistorySection({ patient, record, role }: { patient: Patient; record: C
                 trailing={<span className="flex items-center gap-2"><Badge tone={a.severity === 'grave' ? 'danger' : 'warning'}>{a.severity}</Badge>{write && <RemoveAllergyDialog patientId={patient.id} allergyId={a.id} agent={a.agent} />}</span>} />
             ))}
           </List>
-        ) : <p className="px-6 py-5 text-[14px] text-muted-foreground">Alergias negadas.</p>}
+        ) : <p className="px-5 py-4 text-[13px] text-muted-foreground sm:px-6">Alergias negadas.</p>}
       </Card>
 
       <SectionTitle action={write && <FamilyHistoryDialog patientId={patient.id} />}>Antecedentes heredofamiliares</SectionTitle>
       <Card className="py-1.5">
         {history.family.length ? (
           <List>{history.family.map((f) => <ListItem key={f.id} title={f.condition} description={[f.relative, f.notes].filter(Boolean).join(' · ')} />)}</List>
-        ) : <p className="px-6 py-5 text-[14px] text-muted-foreground">Interrogados y negados.</p>}
+        ) : <p className="px-5 py-4 text-[13px] text-muted-foreground sm:px-6">Interrogados y negados.</p>}
       </Card>
 
       <SectionTitle action={write && <ProblemDialog patientId={patient.id} />}>Personales patológicos</SectionTitle>
@@ -299,7 +298,7 @@ function HistorySection({ patient, record, role }: { patient: Patient; record: C
           <Card className="py-1.5">
             {history.surgeries.length ? (
               <List>{history.surgeries.map((s) => <ListItem key={s.id} title={s.procedure} description={[formatDate(s.date, 'medium'), s.hospital, s.complications].filter(Boolean).join(' · ')} />)}</List>
-            ) : <p className="px-6 py-5 text-[14px] text-muted-foreground">Niega antecedentes quirúrgicos.</p>}
+            ) : <p className="px-5 py-4 text-[13px] text-muted-foreground sm:px-6">Niega antecedentes quirúrgicos.</p>}
           </Card>
         </div>
         <div>
@@ -307,7 +306,7 @@ function HistorySection({ patient, record, role }: { patient: Patient; record: C
           <Card className="py-1.5">
             {history.hospitalizations.length ? (
               <List>{history.hospitalizations.map((h) => <ListItem key={h.id} title={h.reason} description={`${formatDate(h.date, 'medium')}${h.days !== undefined ? ` · ${h.days} días` : ''}`} />)}</List>
-            ) : <p className="px-6 py-5 text-[14px] text-muted-foreground">Niega hospitalizaciones previas.</p>}
+            ) : <p className="px-5 py-4 text-[13px] text-muted-foreground sm:px-6">Niega hospitalizaciones previas.</p>}
           </Card>
         </div>
       </div>
@@ -340,7 +339,7 @@ function HistorySection({ patient, record, role }: { patient: Patient; record: C
                 <DescriptionItem label="IVSA · método anticonceptivo">{go.sexualOnset ? `${go.sexualOnset} años` : '—'}{go.contraception && ` · ${go.contraception}`}</DescriptionItem>
                 <DescriptionItem label="Última citología · mastografía">{go.lastPap ? formatDate(go.lastPap, 'medium') : '—'} · {go.lastMammography ? formatDate(go.lastMammography, 'medium') : '—'}</DescriptionItem>
               </DescriptionList>
-            ) : <p className="px-6 py-5 text-[14px] text-muted-foreground">Sin registrar. Usa “Editar” en el apartado anterior.</p>}
+            ) : <p className="px-5 py-4 text-[13px] text-muted-foreground sm:px-6">Sin registrar. Usa “Editar” en el apartado anterior.</p>}
           </Card>
         </>
       )}
@@ -349,7 +348,7 @@ function HistorySection({ patient, record, role }: { patient: Patient; record: C
       <Card className="py-1.5">
         {history.immunizations.length ? (
           <List>{history.immunizations.map((i) => <ListItem key={i.id} title={i.vaccine} description={`${i.dose} · ${formatDate(i.date, 'medium')}${i.lot ? ` · lote ${i.lot}` : ''}`} />)}</List>
-        ) : <p className="px-6 py-5 text-[14px] text-muted-foreground">Sin vacunas registradas.</p>}
+        ) : <p className="px-5 py-4 text-[13px] text-muted-foreground sm:px-6">Sin vacunas registradas.</p>}
       </Card>
     </div>
   )

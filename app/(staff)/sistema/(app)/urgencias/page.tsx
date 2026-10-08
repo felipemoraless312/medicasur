@@ -4,7 +4,7 @@ import { Activity, Clock, TimerReset, Users } from 'lucide-react'
 import { ColumnChart } from '@/components/charts/column-chart'
 import { ChartCard, KpiGrid, PartBar } from '@/components/charts/figures'
 import { Badge } from '@/components/ui/badge'
-import { PageHeader } from '@/components/ui/page-header'
+import { PageHeader, SectionTitle } from '@/components/ui/page-header'
 import { canAccess } from '@/modules/auth/permissions'
 import { requireStaff } from '@/modules/auth/session'
 import { getEmergencyBoard, triageLevels, type EmergencyPatient, type TriageLevel } from '@/modules/hospital/data'
@@ -50,17 +50,17 @@ export default async function EmergencyPage() {
         </ChartCard>
       </div>
 
-      <h2 className="mb-3 mt-8 px-1 text-title-3">Sala de urgencias</h2>
+      <SectionTitle>Sala de urgencias</SectionTitle>
       <div className="-mx-5 overflow-x-auto px-5 pb-2 sm:mx-0 sm:px-0">
-        <div className="grid min-w-[56rem] grid-cols-5 gap-3">
+        <div className="grid min-w-4xl grid-cols-5 gap-3">
           {levels.map((level) => {
             const meta = triageLevels[level]
             const list = patients.filter((p) => p.triage === level).sort((a, b) => b.waitMinutes - a.waitMinutes)
             return (
-              <section key={level} className="rounded-2xl bg-muted/60 p-2.5" aria-label={meta.label}>
-                <header className="mb-2.5 flex items-center justify-between px-1.5 pt-1">
-                  <span className="flex items-center gap-2 text-[13px] font-semibold"><span className="size-3 rounded-full" style={{ background: meta.color }} />{meta.short}</span>
-                  <span className="text-[12px] text-muted-foreground">{meta.target ? `≤ ${meta.target} min` : 'Inmediato'} · {list.length}</span>
+              <section key={level} className="rounded-xl border border-border bg-surface p-2" aria-label={meta.label}>
+                <header className="mb-2 flex items-center justify-between gap-2 px-1.5 pt-1">
+                  <span className="flex items-center gap-2 text-[13px] font-semibold"><span className="h-3.5 w-1 rounded-full" style={{ background: meta.color }} />{meta.short}<span className="font-normal tabular-nums text-subtle">{list.length}</span></span>
+                  <span className="text-[12px] text-muted-foreground">{meta.target ? `≤ ${meta.target} min` : 'Inmediato'}</span>
                 </header>
                 <ul className="space-y-2">
                   {list.map((p) => {
@@ -68,7 +68,7 @@ export default async function EmergencyPage() {
                     const card = (
                       <>
                         <div className="flex items-start justify-between gap-2">
-                          <p className="font-medium leading-5">{p.name}</p>
+                          <p className="text-[14px] font-medium leading-5">{p.name}</p>
                           <span className={cn('shrink-0 text-[13px] font-semibold tabular-nums', late ? 'text-danger' : 'text-muted-foreground')}>{p.waitMinutes} min</span>
                         </div>
                         <p className="mt-1 text-[13px] leading-5 text-muted-foreground">{p.age} años · {p.complaint}</p>
@@ -78,23 +78,23 @@ export default async function EmergencyPage() {
                         </div>
                       </>
                     )
-                    const className = cn('block rounded-xl border-l-[3px] bg-card p-3 shadow-card', late && 'ring-1 ring-danger/40')
+                    const className = cn('block rounded-lg border border-border border-l-2 bg-card p-3', late && 'border-danger/40')
                     return (
                       <li key={p.id}>
                         {canOpen && p.patientId
-                          ? <Link href={`/sistema/pacientes/${p.patientId}`} className={cn(className, 'hover:bg-muted/50')} style={{ borderLeftColor: meta.color }}>{card}</Link>
+                          ? <Link href={`/sistema/pacientes/${p.patientId}`} className={cn(className, 'transition-colors hover:border-[#c4c4c4]')} style={{ borderLeftColor: meta.color }}>{card}</Link>
                           : <div className={className} style={{ borderLeftColor: meta.color }}>{card}</div>}
                       </li>
                     )
                   })}
-                  {!list.length && <li className="px-2 py-4 text-center text-[13px] text-subtle">Sin pacientes</li>}
+                  {!list.length && <li className="rounded-lg border border-dashed border-input px-2 py-5 text-center text-[12px] text-subtle">Sin pacientes</li>}
                 </ul>
               </section>
             )
           })}
         </div>
       </div>
-      <p className="mt-6 px-1 text-xs text-subtle">Tablero de demostración con datos ficticios. Se conectará con el registro de urgencias y la nota de urgencias del expediente.</p>
+      <p className="mt-6 text-[12px] text-subtle">Tablero de demostración con datos ficticios. Se conectará con el registro de urgencias y la nota de urgencias del expediente.</p>
     </>
   )
 }

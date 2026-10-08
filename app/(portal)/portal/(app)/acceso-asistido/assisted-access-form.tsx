@@ -14,17 +14,17 @@ export function AssistedAccessForm() {
   if (sent) {
     return (
       <Card className="animate-rise p-8 text-center">
-        <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-success-soft text-success"><Check size={24} /></span>
-        <h2 className="mt-4 text-title-3">Solicitud enviada</h2>
-        <p className="mx-auto mt-2 max-w-sm text-muted-foreground">La clínica verificará la identidad de tu contacto antes de otorgar el acceso.</p>
+        <span className="mx-auto flex size-10 items-center justify-center rounded-lg bg-success-soft text-success"><Check size={20} /></span>
+        <h2 className="mt-4 text-[16px] font-semibold">Solicitud enviada</h2>
+        <p className="mx-auto mt-1.5 max-w-sm text-[14px] leading-6 text-muted-foreground">La clínica verificará la identidad de tu contacto antes de otorgar el acceso.</p>
       </Card>
     )
   }
 
   return (
-    <Card className="p-6 sm:p-7">
-      <p className="flex gap-3 rounded-xl bg-muted p-4 text-[14px] leading-6 text-muted-foreground">
-        <ShieldCheck size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
+    <Card className="p-5 sm:p-6">
+      <p className="flex gap-3 rounded-lg border border-border bg-surface px-4 py-3 text-[13px] leading-5 text-muted-foreground">
+        <ShieldCheck size={16} className="mt-0.5 shrink-0" aria-hidden="true" />
         Tu contacto no tendrá acceso hasta que la clínica lo valide. Puedes revocarlo en cualquier momento.
       </p>
       <form onSubmit={(event) => { event.preventDefault(); setSent(true) }} className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -43,7 +43,7 @@ export function AssistedAccessForm() {
             <option value="completo">Expediente completo</option>
           </Select>
         </Field>
-        <div className="sm:col-span-2"><Button type="submit">Enviar solicitud</Button></div>
+        <div className="flex justify-end border-t border-separator pt-5 sm:col-span-2"><Button type="submit">Enviar solicitud</Button></div>
       </form>
     </Card>
   )

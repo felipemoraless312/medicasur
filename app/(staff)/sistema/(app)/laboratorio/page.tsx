@@ -65,7 +65,7 @@ export default async function StudiesPage({ searchParams }: PageProps<'/sistema/
         </ChartCard>
       </div>
 
-      <LinkTabs className="mt-6" label="Vista" current={view} items={[
+      <LinkTabs variant="segmented" className="mt-8" label="Vista" current={view} items={[
         { key: 'pendientes', label: 'Pendientes', href: '/sistema/laboratorio' },
         { key: 'todos', label: 'Todos', href: '/sistema/laboratorio?vista=todos' },
       ]} />

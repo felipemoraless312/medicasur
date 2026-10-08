@@ -1,11 +1,9 @@
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ChevronLeft } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { Card, CardHeader } from '@/components/ui/card'
 import { DescriptionItem, DescriptionList } from '@/components/ui/list'
-import { PageHeader, SectionTitle } from '@/components/ui/page-header'
+import { BackLink, PageHeader, SectionTitle } from '@/components/ui/page-header'
 import { canAccess } from '@/modules/auth/permissions'
 import { requireStaff } from '@/modules/auth/session'
 import { getEquipmentDetail } from '@/modules/equipment/data'
@@ -33,9 +31,7 @@ export default async function EquipmentDetailPage({ params }: PageProps<'/sistem
 
   return (
     <>
-      <Link href="/sistema/equipos" className="-ml-1 mb-6 inline-flex items-center gap-0.5 text-[14px] text-accent-foreground hover:underline">
-        <ChevronLeft size={17} aria-hidden="true" /> Equipos médicos
-      </Link>
+      <BackLink href="/sistema/equipos">Equipos médicos</BackLink>
       <PageHeader
         eyebrow={`${item.inventoryNumber} · ${item.area}`}
         title={item.name}
@@ -55,9 +51,9 @@ export default async function EquipmentDetailPage({ params }: PageProps<'/sistem
         <Badge tone={item.riskClass === 'III' ? 'danger' : item.riskClass === 'II' ? 'warning' : 'neutral'}>{riskClassLabels[item.riskClass]}</Badge>
         <Badge tone={item.life.tone}>{item.life.label}</Badge>
       </div>
-      {item.notes && <p className="mt-4 rounded-xl bg-muted px-4 py-3 text-[14px] text-muted-foreground">{item.notes}</p>}
+      {item.notes && <p className="mt-4 rounded-lg border border-border bg-surface px-4 py-3 text-[13px] leading-5 text-muted-foreground">{item.notes}</p>}
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+      <div className="mt-6 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3">
         <DueCard title="Mantenimiento preventivo" due={item.preventive} last={item.lastPreventiveAt} extra={item.plan.included ? `Frecuencia ${item.plan.label.toLowerCase()}` : item.plan.label} />
         <DueCard title="Calibración" due={item.calibration} last={item.lastCalibrationAt} extra={item.requiresCalibration ? `Cada ${item.calibrationMonths ?? 12} meses` : undefined} />
         <DueCard title="Seguridad eléctrica" due={item.electrical} last={item.lastElectricalSafetyAt} extra={item.electricalSafety ? 'Anual · IEC 62353' : undefined} />
@@ -107,10 +103,10 @@ export default async function EquipmentDetailPage({ params }: PageProps<'/sistem
 
 function DueCard({ title, due, last, extra }: { title: string; due: DueState; last?: string; extra?: string }) {
   return (
-    <div className="rounded-2xl bg-card p-5 shadow-card">
+    <div className="bg-card p-5">
       <p className="text-[13px] text-muted-foreground">{title}</p>
-      <p className="mt-2"><Badge tone={due.tone}>{due.label}</Badge></p>
-      {due.date && <p className="mt-2 text-[14px]">Próximo: <b className="font-semibold">{formatDate(due.date, 'medium')}</b></p>}
+      <p className="mt-2.5"><Badge tone={due.tone}>{due.label}</Badge></p>
+      {due.date && <p className="mt-2.5 text-[14px]">Próximo: <b className="font-semibold">{formatDate(due.date, 'medium')}</b></p>}
       <p className="mt-1 text-[13px] text-subtle">{last ? `Último: ${formatDate(last, 'medium')}` : 'Sin registro'}{extra && ` · ${extra}`}</p>
     </div>
   )
